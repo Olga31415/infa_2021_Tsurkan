@@ -201,6 +201,25 @@ class Target():
     def draw(self):
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.r)
 
+class knopka:
+
+    def __init__(self, screen):
+        self.screen = screen
+        self.x = 700
+        self.y = 50
+        self.w = 90
+        self.h = 50
+        self.color = RED
+
+    def draw(self):
+        pygame.draw.rect(self.screen, self.color,
+                         (self.x, self.y, self.w, self.h))
+
+    def down(self, event):
+        x1, y1 = event.pos
+        if 700 <= x1 <= 790 and 50 <= self.y <= 100:
+            return True        
+
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -214,11 +233,13 @@ for t in range(4):
 clock = pygame.time.Clock()
 gun = Gun(screen)
 finished = False
-play_time = 12000
+play_time = 24000
+button = knopka(screen)
 
 while not finished:
     screen.fill(WHITE)
     gun.draw()
+    button.draw()
     text_surface = font.render('your points: ' + str(points), True, (0, 0, 0))
     screen.blit(text_surface, (0, 0))
     timer += 1
@@ -236,6 +257,9 @@ while not finished:
         if event.type == pygame.QUIT:
             finished = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
+            if button.down(event):
+                play_time = 24000
+                points = 0            
             gun.fire2_start(event)  # зарядка пушки
         elif event.type == pygame.MOUSEBUTTONUP:
             gun.fire2_end(event)  # выстрел
