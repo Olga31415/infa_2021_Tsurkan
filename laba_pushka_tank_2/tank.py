@@ -91,13 +91,16 @@ class Ball:
         Returns:
             Возвращает True в случае столкновения мяча и цели. В противном случае возвращает False.
         """
+        """сталкивание с мишенями круглой формы"""
         return ((self.x - obj.x) ** 2 + (self.y - obj.y) ** 2 <= (self.r + obj.r) ** 2)
 
     def hittest1(self, obj):
+        """сталкивание с мишенями прямоцгольной формы"""
         if (obj.x + self.r <= self.x <= obj.x + obj.rx + self.r) and (obj.y + self.r <= self.y <= obj.y + obj.ry + self.r):
             return True
 
     def hittest2(self, obj):
+        """сталкивание с другими танками, не с "материнским"""
         if obj.num != self.who:
             x_lev_verh = obj.x1
             y_lev_verh = obj.y
@@ -108,6 +111,7 @@ class Ball:
 
 class Gun:
     def __init__(self, num, screen):
+        """задаем параметры пушки"""
         self.screen = screen
         self.puska = pygame.Surface((60, 60), pygame.SRCALPHA)
         self.f2_power = 10
@@ -121,6 +125,7 @@ class Gun:
         self.num = num
 
     def fire2_start(self, event):
+        """зарядка пушки"""
         self.f2_on = 1
 
     def fire2_end(self, event):
@@ -164,7 +169,7 @@ class Gun:
 
 
     def draw(self):
-
+        """ отрисовка самой пушки и частей танка"""
         pygame.draw.polygon(self.screen, self.color,
                             [(self.x + int(5 * np.cos(-self.an + 1.57)), self.y - int(5 * np.sin(-self.an + 1.57))),
                              (self.x + int(5 * np.cos(-self.an - 1.57)),
@@ -189,6 +194,7 @@ class Gun:
 
 
     def power_up(self):
+        """что происходит во время зарядки"""
         if self.f2_on:
             if self.f2_power < 100:
                 self.f2_power += 1
@@ -196,6 +202,7 @@ class Gun:
         else:
             self.color = GREY
 
+    """движение в зависимости от того какая кнопка зажата"""
     def move11(self, event):
         self.x += self.vx
 
@@ -232,6 +239,7 @@ class Target():
 
 
     def move(self):
+        """ характер движения целей"""
         self.x += self.vx
         self.y -= self.vy
         if self.x - self.r < 0:
@@ -253,6 +261,7 @@ class Target():
 class pryamougol:
     
     def __init__(self, screen: pygame.Surface):
+        """ Инициализация новой цели. """
         self.x = randint(100, 500)
         self.y = randint(100, 380)
         self.ry, self.rx = randint(10, 60), randint(10, 60)
@@ -273,6 +282,7 @@ class pryamougol:
         self.ax, self.ay = 0.3, 0.3
         
     def move(self):
+        """описание характера движения"""
         self.x += self.vx
         self.y -= self.vy
         self.vx += self.ax
@@ -313,6 +323,7 @@ class knopka:
 class bomb:
 
     def __init__(self, screen):
+        """инициация бомбы"""
         self.screen = screen
         self.x = randint(10,790)
         self.y = 10
@@ -326,6 +337,7 @@ class bomb:
         pygame.draw.circle(screen, self.color, (self.x, self.y), self.r)
 
     def move(self):
+        """характер движения"""
         self.y += self.vy
         self.vy += 0
 
@@ -333,6 +345,7 @@ class bomb:
         pass
 
     def hittest(self, obj):
+        """попадание в танк"""
         if obj.x1 + self.r <= self.x <= obj.x1 + 100 + self.r and obj.y - 5 + self.r <= self.y <= obj.y + 45 + self.r:
             return True
 
